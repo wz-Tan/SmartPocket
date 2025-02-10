@@ -1,8 +1,6 @@
 package com.example.cashndash
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,28 +15,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cashndash.ui.theme.Black
 import com.example.cashndash.ui.theme.Gray_Container
 import com.example.cashndash.ui.theme.LatoRegular
-import com.example.cashndash.ui.theme.RalewayBold
 import com.example.cashndash.ui.theme.RalewayLight
-import com.example.cashndash.ui.theme.RalewayMedium
-import com.example.cashndash.ui.theme.RalewayRegular
-import com.example.cashndash.ui.theme.RalewayThin
 import com.example.cashndash.ui.theme.White
 
 @Composable
-fun ExpenseIncomePage(){
+fun Page_ExpenseIncome(){
 
     Column(Modifier.fillMaxSize()
         .background(color= Black)

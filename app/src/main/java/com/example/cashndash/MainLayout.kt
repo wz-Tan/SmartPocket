@@ -25,7 +25,7 @@ fun MainLayout(){
         topBar= {
             TopAppBar(
                 colors = TopAppBarColors(
-                    containerColor = Purple,
+                    containerColor = Black,
                     titleContentColor = White,
                     scrolledContainerColor = Purple,
                     navigationIconContentColor = White,
@@ -33,7 +33,7 @@ fun MainLayout(){
                 ),
                 title = { Text("") },
                 modifier = Modifier.fillMaxWidth()
-                    .height(80.dp)
+                    .height(60.dp)
             )
         },
         bottomBar = {
@@ -48,7 +48,7 @@ fun MainLayout(){
         Column(modifier = Modifier
             .padding(padding)
             .fillMaxSize()){
-            ExpenseIncomePage()
+            Page_TransactionDetail()
         }
     }
 }

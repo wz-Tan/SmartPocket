@@ -9,7 +9,7 @@ val Pink80 = Color(0xFFEFB8C8)
 val White=Color(0xFFEBF2FA)
 val Black=Color(0xFF001011)
 val Purple= Color(0xFF6247AA)
-val Gray_Container=Color(0xFFA9A9A9)
+val Gray_Container=Color(0xFF202020)
 
 
 val PurpleGrey40 = Color(0xFF625b71)

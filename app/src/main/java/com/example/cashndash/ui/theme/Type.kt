@@ -8,10 +8,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.cashndash.R
 
-val FontRaleway= FontFamily(
-    Font(R.font.ralewayfont)
+val RalewayThin= FontFamily(
+    Font(R.font.ralewaythin)
 )
 
+val RalewayLight= FontFamily(
+    Font(R.font.ralewaylight)
+)
+
+val RalewayBold= FontFamily(
+    Font(R.font.ralewaybold)
+)
+
+val RalewayMedium= FontFamily(
+    Font(R.font.ralewaymedium)
+)
+
+val RalewayRegular= FontFamily(
+    Font(R.font.ralewayregular)
+)
+
+val LatoRegular=FontFamily(
+    Font(R.font.latoregular)
+)
+//val FontRaleway_Thin=
 
 // Set of Material typography styles to start with
 val Typography = Typography(
