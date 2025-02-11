@@ -3,6 +3,7 @@ package com.example.cashndash
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -101,36 +102,32 @@ fun DropDownMenu() {
     var options = listOf("Option 1", "Option 2", "Option 3")
     var displayedText by remember { mutableStateOf(options[0]) }
     var isExpanded by remember { mutableStateOf(false) }
-    //Semantic Tag to Hold the Text Field and CLicking Functionalities
+
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = {
-            Log.i("transaction", "DropDown Is Clicked")
             isExpanded = it
         },
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .fillMaxWidth(0.7f)
-            .height(50.dp)
-//            .clip(RoundedCornerShape(15.dp))
+            .width(150.dp)
+            .clip(RoundedCornerShape(20.dp))
             .background(White.copy(0.7f))
 
     ) {
-        TextField(
-            modifier = Modifier
-                .menuAnchor(), //This makes it the anchor for the bottom menu
-            readOnly = true,
-            value = displayedText,
-            onValueChange = {},
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
-            },
-            textStyle = TextStyle(
+        Row(Modifier.fillMaxSize()){
+            Text(text=displayedText,
                 fontFamily = RalewayLight,
-                fontSize = 18.sp,
-                color = Black
-            )
-        )
+                fontSize = 20.sp,
+                color = Black,
+                modifier=Modifier
+                    .menuAnchor()
+                    .clickable {
+                        Log.i("Menu","I am Clicked")
+                        isExpanded=true
+                    })
+        }
+
 
         //Actual Menu Contents
         ExposedDropdownMenu(
@@ -151,4 +148,5 @@ fun DropDownMenu() {
 
     }
 }
+
 

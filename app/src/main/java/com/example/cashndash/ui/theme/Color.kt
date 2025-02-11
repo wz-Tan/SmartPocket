@@ -10,7 +10,7 @@ val White=Color(0xFFEBF2FA)
 val Black=Color(0xFF001011)
 val Purple= Color(0xFF6247AA)
 val Gray_Container=Color(0xFF202020)
-
+val LightGray=Color(0xFFD3D3D3)
 
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)

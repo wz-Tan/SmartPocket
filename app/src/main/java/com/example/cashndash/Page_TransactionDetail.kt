@@ -275,7 +275,6 @@ fun Page_TransactionDetail() {
                     //offset is In pixels, because it is added via pixels, then we convert to dp
 
                     state = rememberDraggableState { delta ->
-
                         offsetX = (offsetX+delta).coerceIn(0f,maxOffset)
                         sliderWidth=(60+(offsetX/maxOffset)*290).dp
                     })
