@@ -39,8 +39,12 @@ android {
     }
 }
 
+
+
 dependencies {
     implementation ("co.yml:ycharts:2.1.0")
+    implementation("androidx.compose.ui:ui:1.6.7")
+    implementation("io.github.bytebeats:compose-charts:0.2.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

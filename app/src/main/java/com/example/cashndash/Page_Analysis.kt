@@ -25,17 +25,31 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import co.yml.charts.axis.AxisData
+import co.yml.charts.common.model.Point
+import co.yml.charts.ui.linechart.LineChart
+import co.yml.charts.ui.linechart.model.IntersectionPoint
+import co.yml.charts.ui.linechart.model.Line
+import co.yml.charts.ui.linechart.model.LineChartData
+import co.yml.charts.ui.linechart.model.LinePlotData
+import co.yml.charts.ui.linechart.model.LineStyle
+import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
+import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
+import co.yml.charts.ui.linechart.model.ShadowUnderLine
 import com.example.cashndash.ui.theme.Black
 import com.example.cashndash.ui.theme.Gray_Container
 import com.example.cashndash.ui.theme.LatoRegular
@@ -59,7 +73,7 @@ fun Page_Analysis() {
     ) {
 
         Text(
-            text = "Analysis",
+            text = "July 2025",
             fontFamily = RalewayRegular,
             fontSize = 30.sp,
             color = White,
@@ -126,7 +140,7 @@ fun Page_Analysis() {
                 .fillMaxSize()
                 .padding(top = 20.dp)
                 .clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp))
-                .background(White)
+                .background(Color(0xFFF7F9FF)) //Matches background colour of graph
         ) {
             Column(
                 Modifier
@@ -202,13 +216,14 @@ fun Page_Analysis() {
                     }
 
                     //Time Period Selection
+
+                    var selectedBox by remember{ mutableIntStateOf(1) }
                     Box(
                         Modifier
                             .padding(10.dp)
                             .fillMaxHeight()
                             .width(250.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(LightGray)
                     ) {
 
                         //Row of Boxes for Customisation
@@ -223,7 +238,11 @@ fun Page_Analysis() {
                                     .width(70.dp)
                                     .padding(vertical = 2.dp)
                                     .clip(RoundedCornerShape(10.dp))
-                                    .background(Black)
+                                    .background(
+                                        if(selectedBox==1) Black else Transparent)
+                                    .clickable{
+                                        selectedBox=1
+                                    }
                             ) {
                                 Text(
                                     text = "Month",
@@ -231,7 +250,7 @@ fun Page_Analysis() {
                                     lineHeight = 36.sp,
                                     fontFamily = RalewayRegular,
                                     fontSize = 20.sp,
-                                    color = White,
+                                    color = if(selectedBox==1) White else Black,
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
@@ -242,7 +261,11 @@ fun Page_Analysis() {
                                     .width(70.dp)
                                     .padding(vertical = 2.dp)
                                     .clip(RoundedCornerShape(10.dp))
-                                    .background(Color.Transparent)
+                                    .background(
+                                        if(selectedBox==2) Black else Transparent)
+                                    .clickable{
+                                        selectedBox=2
+                                    }
                             ) {
                                 Text(
                                     text = "Week",
@@ -250,7 +273,7 @@ fun Page_Analysis() {
                                     lineHeight = 36.sp,
                                     fontFamily = RalewayRegular,
                                     fontSize = 20.sp,
-                                    color = Black,
+                                    color = if(selectedBox==2) White else Black,
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
@@ -260,7 +283,11 @@ fun Page_Analysis() {
                                     .width(70.dp)
                                     .padding(vertical = 2.dp)
                                     .clip(RoundedCornerShape(10.dp))
-                                    .background(Color.Transparent)
+                                    .background(
+                                        if(selectedBox==3) Black else Transparent)
+                                    .clickable{
+                                        selectedBox=3
+                                    }
                             ) {
                                 Text(
                                     text = "Day",
@@ -268,7 +295,7 @@ fun Page_Analysis() {
                                     lineHeight = 36.sp,
                                     fontFamily = RalewayRegular,
                                     fontSize = 20.sp,
-                                    color = Black,
+                                    color = if(selectedBox==3) White else Black,
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
@@ -292,12 +319,57 @@ fun Page_Analysis() {
 
                 //Graph Area
                 Box(Modifier
-                    .fillMaxWidth()
-                    .height(550.dp)
-                    .padding(10.dp)
-                    .background(Gray_Container.copy(0.3f))){
+                    .fillMaxSize()){
 
-                    Chart()
+                    val steps=5
+                    //Points for the graph (Most likely need to count using ratio)
+                    val pointsData=listOf(Point(0f, 40f), Point(1f, 90f), Point(2f, 0f), Point(3f, 60f), Point(4f, 10f))
+
+
+                    val xAxisData = AxisData.Builder()
+                        .axisStepSize(70.dp) //Space between each x point
+                        .steps(pointsData.size - 1) //How many x do we want
+                        .labelData { i -> i.toString() } //Label x with the index
+                        .labelAndAxisLinePadding(15.dp) //Padding between axis and labels
+                        .axisLineColor(Transparent)
+                        .axisLabelColor(Black)
+                        .build()
+
+                    //Step size for Y is automated
+                    val yAxisData = AxisData.Builder()
+                        .steps(steps)
+                        .labelAndAxisLinePadding(20.dp)
+                        .axisLineColor(Transparent)
+                        .axisLabelColor(Black)
+                        .labelData { i ->
+                            val yScale = 100 / steps  //max/how many y values do you want
+                            (i * yScale).toString() //For each index, we label with a multiplier of 20 (100/5=20)
+                        }.build()
+
+                    //Customisation (Screw Around and Find Out)
+                    val lineChartData = LineChartData(
+                        linePlotData = LinePlotData(
+                            lines = listOf(
+                                Line(
+                                    dataPoints = pointsData,
+                                    LineStyle(),
+                                    IntersectionPoint(),
+                                    SelectionHighlightPoint(), //When we pick a point
+                                    ShadowUnderLine(
+                                        brush= Brush.verticalGradient(listOf(Color.Red, White))
+                                    ),
+                                    SelectionHighlightPopUp()
+                                )
+                            ),
+                        ),
+                        xAxisData = xAxisData,
+                        yAxisData = yAxisData,
+                        backgroundColor=Color(0xFFF7F9FF),
+                    )
+
+                    LineChart(modifier= Modifier
+                        .fillMaxSize(),
+                        lineChartData=lineChartData)
 
                 }
 

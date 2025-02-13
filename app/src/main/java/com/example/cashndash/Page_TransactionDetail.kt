@@ -73,8 +73,8 @@ fun Page_TransactionDetail() {
             ) {
                 Text(
                     text = "Add Transaction",
-                    fontFamily = RalewayLight,
-                    fontSize = 40.sp,
+                    fontFamily = RalewayRegular,
+                    fontSize = 30.sp,
                     color = White,
                 )
 
