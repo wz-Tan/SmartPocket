@@ -55,37 +55,28 @@ fun Page_TransactionDetail() {
         Modifier
             .fillMaxSize()
             .background(color = Black)
-            .padding(vertical = 3.dp),
+            .padding(horizontal = 10.dp, vertical = 3.dp)
     ) {
 
         //Title and Amount
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .height(180.dp)
-        ) {
 
-            Column(
-                Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceAround,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Add Transaction",
-                    fontFamily = RalewayRegular,
-                    fontSize = 30.sp,
-                    color = White,
-                )
 
-                Text(
-                    text = "$200.00",
-                    fontFamily = LatoRegular,
-                    fontSize = 60.sp,
-                    color = White,
-                )
-            }
-        }
+        Text(
+            text = "Add Transaction",
+            fontFamily = RalewayRegular,
+            fontSize = 30.sp,
+            color = White,
+            textAlign = TextAlign.Start,
+            modifier=Modifier.padding(bottom=20.dp)
+        )
+
+        Text(
+            text = "$200.00",
+            fontFamily = LatoRegular,
+            fontSize = 60.sp,
+            color = White,
+        )
+
 
         //Details Box
         Box(

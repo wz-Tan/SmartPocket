@@ -18,12 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cashndash.ui.theme.Black
 import com.example.cashndash.ui.theme.Gray_Container
 import com.example.cashndash.ui.theme.LatoRegular
 import com.example.cashndash.ui.theme.RalewayLight
+import com.example.cashndash.ui.theme.RalewayRegular
 import com.example.cashndash.ui.theme.White
 
 @Composable
@@ -34,10 +36,20 @@ fun Page_ExpenseIncome(){
         .padding(horizontal = 10.dp, vertical = 3.dp)
         .verticalScroll(rememberScrollState())
     ){
+        Text(
+            text = "Overview",
+            fontFamily = RalewayRegular,
+            fontSize = 30.sp,
+            color = White,
+            modifier=Modifier
+                .fillMaxWidth()
+                .padding(bottom=10.dp),
+            textAlign = TextAlign.Start
+        )
 
         //Balance Container
         Box(Modifier
-            .height(100.dp)
+            .height(90.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
             .background(Gray_Container)){
@@ -74,7 +86,7 @@ fun Page_ExpenseIncome(){
 
             //Income Box
             Box(Modifier
-                .height(100.dp)
+                .height(80.dp)
                 .width(185.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .background(Gray_Container)
@@ -104,7 +116,7 @@ fun Page_ExpenseIncome(){
 
             //Expense Box
             Box(Modifier
-                .height(100.dp)
+                .height(80.dp)
                 .width(185.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .background(Gray_Container)

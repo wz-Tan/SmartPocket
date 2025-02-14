@@ -65,17 +65,28 @@ fun Page_Analysis() {
     var filters = listOf("Income", "Expenses", "Income/Expenses")
     var filterText by remember { mutableStateOf(filters[0]) }
     var menuExpanded by remember { mutableStateOf(false) }
+
     Column(
         Modifier
             .background(Black)
             .fillMaxSize()
-            .padding(3.dp)
+            .padding(horizontal = 10.dp, vertical = 3.dp)
     ) {
+        Text(
+            text = "Analysis",
+            fontFamily = RalewayRegular,
+            fontSize = 30.sp,
+            color = White,
+            modifier=Modifier
+                .fillMaxWidth()
+                .padding(bottom=10.dp),
+            textAlign = TextAlign.Start
+        )
 
         Text(
             text = "July 2025",
             fontFamily = RalewayRegular,
-            fontSize = 30.sp,
+            fontSize = 25.sp,
             color = White,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
