@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,7 +32,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -38,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import com.example.cashndash.ui.theme.Black
 import com.example.cashndash.ui.theme.Gray_Container
 import com.example.cashndash.ui.theme.LatoRegular
+import com.example.cashndash.ui.theme.LightGray
 import com.example.cashndash.ui.theme.RalewayLight
 import com.example.cashndash.ui.theme.RalewayThin
 import com.example.cashndash.ui.theme.White
@@ -143,9 +151,164 @@ fun DropDownMenu() {
                     }
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun BudgetProgressBar(){
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+    ){
+        //Amount Spent Section (Middle-Text Only)
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(30.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Box(
+                Modifier
+                    .size(10.dp)
+                    .clip(RoundedCornerShape(50.dp))
+                    .background(Color.Red)
+            )
+
+            Text(
+                text = "Spent",
+                fontFamily = RalewayLight,
+                fontSize = 20.sp,
+                color = White,
+                modifier = Modifier
+                    .padding(start = 10.dp, end = 20.dp)
+            )
+
+            Box(
+                Modifier
+                    .size(10.dp)
+                    .clip(RoundedCornerShape(50.dp))
+                    .background(LightGray)
+            )
+
+            Text(
+                text = "Remaining",
+                fontFamily = RalewayLight,
+                fontSize = 20.sp,
+                color = White,
+                modifier = Modifier
+                    .padding(start = 10.dp, end = 20.dp)
+            )
 
         }
 
+
+        //Box to Contain Both Progress Bar and the Drop Down
+        Box(
+            Modifier
+                .padding(top = 3.dp)
+                .fillMaxWidth()
+                .height(60.dp)
+        ) {
+            var showPopup by remember { mutableStateOf(false) }
+            var spentBarWidth by remember { mutableStateOf(60.dp) }
+            var clickedBarWidth by remember { mutableStateOf(0.dp) }
+
+            //Convert DP to Pixels for Canvas Usage (Customise PopUp Box)
+            var radius= with(LocalDensity.current){10.dp.toPx()}
+
+            //Progress Bar, Remaining is the Parent, Child is the Amount Spent
+            Box(
+                Modifier
+                    .width(400.dp)
+                    .height(10.dp)
+                    .clip(RoundedCornerShape(50.dp))
+                    .background(LightGray)
+                    .clickable {
+                        showPopup = !showPopup
+                        clickedBarWidth = 400.dp - spentBarWidth
+                    }
+            ) {
+
+                //Amount Spent Bar
+                Box(
+                    Modifier
+                        .fillMaxHeight()
+                        .width(spentBarWidth)
+                        .clip(RoundedCornerShape(50.dp))
+                        .background(Color.Red)
+                        .clickable {
+                            showPopup = !showPopup
+                            clickedBarWidth = spentBarWidth
+                        }
+                )
+            }
+
+            //PopUp Box
+            if (showPopup) {
+                Box(
+                    Modifier
+                        .height(80.dp)
+                        .width(120.dp)
+                        .offset(clickedBarWidth / 2, 5.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .drawBehind {
+
+                            val path = Path().apply {
+                                addRoundRect(
+                                    RoundRect(
+                                        left = 0f,
+                                        right = size.width,
+                                        top = 30f,
+                                        bottom = size.height,
+                                        radiusX = radius,
+                                        radiusY = radius
+                                    )
+                                )
+
+                                //Tail (Start, Left, Right)
+                                moveTo(x=0f,y=0f)
+                                lineTo(x=0f,y=80f)
+                                lineTo(x=50f,y=60f)
+                                close()
+                            }
+
+                            drawPath(
+                                path = path,
+                                color = White
+                            )
+
+                        }
+                        .clickable {
+                            showPopup = false
+                        },
+                ) {
+                    Column(
+                        Modifier
+                            .padding(top=10.dp, start=15.dp)
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        //Actual Box Contents
+                        Text(
+                            text = "60% Spent",
+                            fontFamily = LatoRegular,
+                            fontSize = 15.sp,
+                            color = Black,
+                        )
+
+                        Text(
+                            text = "$8000",
+                            fontFamily = LatoRegular,
+                            fontSize = 15.sp,
+                            color = Black
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
