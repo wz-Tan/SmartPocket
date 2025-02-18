@@ -31,7 +31,8 @@ import com.example.cashndash.ui.theme.White
 @Composable
 fun Page_ExpenseIncome(){
 
-    Column(Modifier.fillMaxSize()
+    Column(Modifier
+        .fillMaxSize()
         .background(color= Black)
         .padding(horizontal = 10.dp, vertical = 3.dp)
         .verticalScroll(rememberScrollState())

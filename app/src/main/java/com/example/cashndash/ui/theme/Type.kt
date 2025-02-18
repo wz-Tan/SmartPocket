@@ -31,6 +31,10 @@ val RalewayRegular= FontFamily(
 val LatoRegular=FontFamily(
     Font(R.font.latoregular)
 )
+
+val RobotoThin= FontFamily(
+    Font(R.font.robotothin)
+)
 //val FontRaleway_Thin=
 
 // Set of Material typography styles to start with

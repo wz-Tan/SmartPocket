@@ -1,9 +1,6 @@
 package com.example.cashndash
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,55 +9,43 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.RoundRect
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import co.yml.charts.common.model.PlotType
+import co.yml.charts.ui.piechart.charts.DonutPieChart
+import co.yml.charts.ui.piechart.models.PieChartConfig
+import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.cashndash.ui.theme.Black
 import com.example.cashndash.ui.theme.Gray_Container
 import com.example.cashndash.ui.theme.LatoRegular
 import com.example.cashndash.ui.theme.LightGray
-import com.example.cashndash.ui.theme.RalewayBold
 import com.example.cashndash.ui.theme.RalewayLight
 import com.example.cashndash.ui.theme.RalewayRegular
 import com.example.cashndash.ui.theme.White
-import me.bytebeats.views.charts.bar.render.bar.SimpleBarDrawer
-import me.bytebeats.views.charts.pie.PieChart
-import me.bytebeats.views.charts.pie.PieChartData
-import me.bytebeats.views.charts.pie.render.ISliceDrawer
-import me.bytebeats.views.charts.pie.render.SimpleSliceDrawer
-import me.bytebeats.views.charts.simpleChartAnimation
+import kotlin.math.floor
 
 @Composable
 fun Page_Budget() {
-
     Column(
         Modifier
             .background(Black)
@@ -76,56 +61,76 @@ fun Page_Budget() {
             textAlign = TextAlign.Start
         )
 
-        //Donut Chart (1f is max)
+        //Container For Graph
         Box(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .size(300.dp)
+            Modifier
                 .padding(top = 30.dp)
-        ) {
-            PieChart(
-                pieChartData = PieChartData(
-                    slices = listOf(
-                        PieChartData.Slice(
-                            0.5f,
-                            Color.Green
-                        ),
-                        PieChartData.Slice(
-                            0.4f,
-                            Color.Yellow
-                        ),
-                        PieChartData.Slice(
-                            0.1f,
-                            Color(0xFFb3ecec)
-                        )
+                .height(300.dp)
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)){
+
+            //Graph->Can be canvas actually (Read On The Calculations and Clickable)
+            Box(
+                Modifier
+                    .size(300.dp)
+                    .align(Alignment.Center)
+                    .drawBehind{
+                        val path= Path().apply{
+                            drawArc(
+                                Color.Red,
+                                0f, //Angle starts from where (0f is the 90deg)
+                                90f, //The angle of the arc (Visualise with useCentre)
+                                useCenter = false, //Is the arc connected to the centre
+                                style = Stroke(70f, cap = StrokeCap.Butt), //How to draw the graph and how it ends (this determines the looks_
+                                size = Size(300.dp.toPx(),300.dp.toPx()),
+                                topLeft = Offset(10f,10f) //Push the arc by how much from the ori angle (Helps in adjusting the stroke position as excess might change the visual effect)
+                            )
+
+                            drawArc(
+                                Color.Green,
+                                90f,
+                                90f,
+                                useCenter = false,
+                                style = Stroke(70f, cap = StrokeCap.Butt),  //May cause it to go oversize
+                                size = Size(300.dp.toPx(),300.dp.toPx()),
+                                topLeft = Offset(10f,8f)
+                            )
+
+                            drawArc(
+                                Color.Yellow,
+                                180f,
+                                180f,
+                                useCenter = false,
+                                style = Stroke(70f, cap = StrokeCap.Butt),  //May cause it to go oversize
+                                size = Size(300.dp.toPx(),300.dp.toPx()),
+                                topLeft = Offset(10f,8f)
+                            )
+                        }
+                    }
+            ){
+                //Labels for spent and remaining
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Text(
+                        text = "Amount Spent",
+                        fontFamily = RalewayLight,
+                        fontSize = 20.sp,
+                        color = White,
                     )
-                ),
-                modifier = Modifier.width(600.dp),
-                animation = simpleChartAnimation(),
-                sliceDrawer = SimpleSliceDrawer()
-            )
 
-            //Labels for spent and remaining
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+                    Text(
+                        text = "$200000.00",
+                        fontFamily = LatoRegular,
+                        fontSize = 30.sp,
+                        color = White,
+                    )
+                }
 
-                Text(
-                    text = "Amount Spent",
-                    fontFamily = RalewayLight,
-                    fontSize = 20.sp,
-                    color = White,
-                )
-
-                Text(
-                    text = "$200000.00",
-                    fontFamily = LatoRegular,
-                    fontSize = 30.sp,
-                    color = White,
-                )
             }
         }
 
@@ -134,17 +139,19 @@ fun Page_Budget() {
             Modifier
                 .padding(top = 20.dp)
                 .fillMaxSize()
-        ){
+        ) {
             //*The Progress Bar Was Originally Here
 
             //Bottom Details
-            Box(Modifier
-                .fillMaxSize()
-            ){
-
-                Column(Modifier
+            Box(
+                Modifier
                     .fillMaxSize()
-                ){
+            ) {
+
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                ) {
                     Text(
                         text = "Limits",
                         fontFamily = RalewayRegular,
@@ -154,7 +161,23 @@ fun Page_Budget() {
                             .fillMaxWidth(),
                         textAlign = TextAlign.Start
                     )
+
+                    DetailBar(
+                        label = "Food",
+                        amtSpent = 20.00f,
+                        totalAmount = 30.00f,
+                        color = Color.Yellow
+
+                    )
+
                     DetailBar()
+
+                    DetailBar(
+                        label = "Bills",
+                        amtSpent = 200.00f,
+                        totalAmount = 3000.00f,
+                        color = Color.Red
+                    )
 
                 }
             }
@@ -165,8 +188,8 @@ fun Page_Budget() {
 @Composable
 fun DetailBar(
     label:String="Shopping",
-    amtSpent:Float=10f,
-    totalAmount:Float=100f,
+    amtSpent:Float=10.00f,
+    totalAmount:Float=100.00f,
     color: Color=Color.Green){
 
     Box(
@@ -210,7 +233,9 @@ fun DetailBar(
 
 
             //Progress Bar
-            var spentBarWidth by remember { mutableStateOf(60.dp) }
+            var spentRatio= (amtSpent/totalAmount)
+            var spentBarWidth= (spentRatio*400).dp
+            val roundedRatio= (floor(spentRatio*10000))/100
 
             Box(
                 Modifier
@@ -221,14 +246,13 @@ fun DetailBar(
                     .background(LightGray)
 
             ) {
-
                 //Amount Spent Bar
                 Box(
                     Modifier
                         .fillMaxHeight()
                         .width(spentBarWidth)
                         .clip(RoundedCornerShape(3.dp))
-                        .background(Color.Yellow)
+                        .background(color)
                 )
             }
 
@@ -240,7 +264,7 @@ fun DetailBar(
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Text(
-                    text = ((amtSpent/totalAmount)*100).toString()+ "%",
+                    text = "$roundedRatio%",
                     fontFamily = LatoRegular,
                     fontSize = 20.sp,
                     color = White,
@@ -255,5 +279,36 @@ fun DetailBar(
             }
         }
     }
+}
 
+@Composable
+fun customDonutChart(){
+    //font to use for the text in the centre
+    //The sums are added to get the percentage
+    val donutChartData = PieChartData(
+        slices = listOf(
+            PieChartData.Slice("hehehea", 20f, Color.Green,{"Descir[tipnm"}),
+            PieChartData.Slice("Dell", 30f, Color.Yellow),
+            PieChartData.Slice("Lenovo", 50f,Color.Red)
+        ),
+        plotType = PlotType.Donut
+    )
+
+    val donutChartConfig =
+        PieChartConfig(
+            labelVisible = true,
+            strokeWidth =70f,
+            labelColor =White,
+            backgroundColor = Black,
+            activeSliceAlpha = .9f,
+            isAnimationEnable = true,
+            chartPadding = 25,
+            labelFontSize = 25.sp
+        )
+
+    DonutPieChart(
+        modifier=Modifier
+            .fillMaxSize() ,pieChartData = donutChartData,
+        pieChartConfig = donutChartConfig
+    )
 }
