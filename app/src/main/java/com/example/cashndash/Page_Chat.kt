@@ -7,12 +7,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -64,172 +67,199 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 
 data class TextBoxData(
-    val innerText:String,
-    val sender:String
+    val innerText: String, val sender: String
 )
+
+//How to Clip Content on Top Of Screen? Or how to move the bottom container as needed 
 @Composable
-fun Page_Chat() {
-    Column(
+fun Page_Chat(padding:PaddingValues) {
+    Box(
         Modifier
             .fillMaxSize()
             .background(color = Black)
             .padding(horizontal = 10.dp, vertical = 3.dp)
+            //Keeps the Content Within the Padding (Without this the window will go beyond top bar)
+            .consumeWindowInsets(padding)
+            .imePadding() //Adjust Padding When Keyboard Called
     ) {
-        Text(
-            text = "Chat",
-            fontFamily = RalewayRegular,
-            fontSize = 30.sp,
-            color = White,
-            modifier = Modifier
-                .fillMaxWidth(),
-            textAlign = TextAlign.Start
-        )
-
-        //Box containing Chat and Bottom Insert Textbox
-        Box(
+        Column(
             Modifier
-                .padding(top=10.dp)
                 .fillMaxSize()
+        ) {
+            Text(
+                text = "Chat",
+                fontFamily = RalewayRegular,
+                fontSize = 30.sp,
+                color = White,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Start
+            )
 
-        ){
-
-            var listState = rememberLazyListState() //Similar to a scroll state for lazy columns
-            val coroutineScope= rememberCoroutineScope()
-            var textBoxList = remember{mutableStateListOf(
-                TextBoxData("This is the first message","Bot"),
-                TextBoxData("This is the second message","User"),
-                TextBoxData("This is the first message","Bot"),
-                TextBoxData("This is the second message","User"),
-                TextBoxData("This is the first message","Bot"),
-                TextBoxData("This is the second message","User"),
-                TextBoxData("This is the first message","Bot"),
-                TextBoxData("This is the second message","User"),
-                TextBoxData("This is the first message","Bot"),
-                TextBoxData("This is the second message","User"),
-                TextBoxData("This is the first message","Bot"),
-                TextBoxData("This is the second message","User"))
-            }
-
-            //Column for chat
-            //LazyColumn to speed up performance because it only renders necessary frames->
-            // Has its own scroll state as well
-            LazyColumn(
-                Modifier
-                    .fillMaxSize()
-                    .padding(bottom=50.dp),
-                state = listState
-            ) {
-                //For Each, Map
-                items(textBoxList){
-                    item->
-                    TextBox(item)
-                }
-
-            }
-
-            //Bottom Input Bar
+            //Box containing Chat and Bottom Insert Textbox
             Box(
                 Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Black)
-                    .border(2.dp, White, RoundedCornerShape(20.dp))
-            ){
-                Row(
+                    .padding(top = 10.dp)
+                    .fillMaxSize()
+            ) {
+
+                var listState = rememberLazyListState() //Similar to a scroll state for lazy columns
+                val coroutineScope = rememberCoroutineScope()
+                var textBoxList = remember {
+                    mutableStateListOf(
+                        TextBoxData("This is the first message", "Bot"),
+                        TextBoxData("This is the second message", "User"),
+                    )
+                }
+
+                //Column for chat
+                //LazyColumn to speed up performance because it only renders necessary frames->
+                // Has its own scroll state as well
+                LazyColumn(
                     Modifier
-                        .fillMaxSize(),
-                ){
-                    Icon(
-                        imageVector = FeatherIcons.Mic,
-                        "Microphone Icon",
-                        tint=White,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(start=10.dp)
-                    )
+                        .fillMaxSize()
+                        .padding(bottom = 50.dp), state = listState
+                ) {
+                    //For Each, Map
+                    items(textBoxList) { item ->
+                        TextBox(item)
+                    }
 
-                    //Text Field Here
-                    var inputText by remember{mutableStateOf("Text Here")}
-                    TextField(
-                        value=inputText,
+                }
 
-                        onValueChange = {
-                            inputText=it
-                        },
-
-
-                        textStyle = TextStyle(
-                            color = White,
-                            fontSize = 16.sp,
-                            fontFamily = RalewayRegular,
-                            textAlign = TextAlign.Start,
-                        ),
-
-                        modifier = Modifier
-                            .padding(start = 10.dp)
-                            .width(290.dp)
-                            .fillMaxHeight()
-                            .border(1.dp,White)
-                            .horizontalScroll(rememberScrollState()),
-
-                        colors = TextFieldDefaults.colors(
-                            focusedTextColor = White,
-                            unfocusedTextColor = White,
-                            unfocusedContainerColor = Black,
-                            focusedContainerColor=Black
+                //Bottom Input Bar
+                Box(
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Black)
+                        .border(2.dp, White, RoundedCornerShape(20.dp))
+                ) {
+                    Row(
+                        Modifier
+                            .fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = FeatherIcons.Mic,
+                            "Microphone Icon",
+                            tint = White,
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .padding(start = 10.dp)
                         )
-                    )
 
+                        //Text Field Here
+                        var inputText by remember { mutableStateOf("") }
+                        var textFieldScrollState = rememberScrollState(10)
+                        var lineWidth = 255.dp
+                        var textWidth = measureTextWidth(
+                            inputText,
+                            TextStyle(
+                                fontSize = 16.sp,
+                                fontFamily = RalewayRegular
+                            )
+                        )
+                        //Configure the Alignment and Scroll State
+                        TextField(
+                            value = inputText,
 
-                    Icon(
-                        imageVector = FeatherIcons.Send,
-                        contentDescription = "Send button",
-                        tint = White,
-                        modifier=Modifier
-                            .fillMaxHeight()
-                            .padding(start=10.dp)
-                            .clickable{
-                                if (inputText!=""){
-                                    textBoxList.add(TextBoxData(inputText,"User"))
-                                    inputText=""
+                            onValueChange = {
+                                inputText = it
 
-                                    //Use Coroutine Scope to Scroll
-                                    //LazyColumn needs items(textBoxList) to scroll to the item index
-                                    coroutineScope.launch{
-                                        listState.scrollToItem(textBoxList.size-1)
-                                    }
+                                val currLine = (textWidth / lineWidth).toInt()
+                                coroutineScope.launch {
+                                    textFieldScrollState.scrollTo(
+                                        //Dont scroll if on first line (Default is 0)
+                                        if (currLine == 0) 5 else textFieldScrollState.maxValue - 5
+                                    )
                                 }
-                            }
-                    )
+
+
+
+                            },
+
+                            placeholder = {
+                                Text(
+                                    "Type Something...",
+                                    color = White.copy(0.7f),
+                                    fontSize = 16.sp,
+                                    lineHeight = 16.sp,
+                                    fontFamily = RalewayRegular
+                                )
+                            },
+
+
+                            textStyle = TextStyle(
+                                color = White,
+                                fontSize = 16.sp,
+                                fontFamily = RalewayRegular,
+                                textAlign = TextAlign.Start,
+                            ),
+
+                            modifier = Modifier
+                                .width(290.dp)
+                                .fillMaxHeight()
+                                .padding(start = 10.dp)
+                                .verticalScroll(textFieldScrollState),
+
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = White,
+                                unfocusedTextColor = White,
+                                unfocusedContainerColor = Black,
+                                focusedContainerColor = Black
+                            )
+                        )
+
+                        val regex_space =
+                            Regex("^\\s*\$") // \\s* means unlimited number of empty (\\s)
+                        Icon(imageVector = FeatherIcons.Send,
+                            contentDescription = "Send button",
+                            tint = White,
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .padding(start = 10.dp)
+                                .clickable {
+                                    if (!inputText.matches(regex_space)) {
+                                        textBoxList.add(TextBoxData(inputText, "User"))
+                                        inputText = ""
+
+
+                                        //Use Coroutine Scope to Scroll
+                                        //LazyColumn needs items(textBoxList) to scroll to the item index
+                                        coroutineScope.launch {
+                                            listState.scrollToItem(textBoxList.size - 1)
+                                        }
+                                    }
+                                })
+                    }
                 }
             }
         }
-
-
     }
 }
 
 @Composable
 fun TextBox(textBoxData: TextBoxData) {
-    var textWidth: Dp = measureTextWidth(textBoxData.innerText, TextStyle(
-        color = White,
-        fontSize = 20.sp,
-        fontFamily = RalewayRegular
-    ))+20.dp
+    var textWidth: Dp = measureTextWidth(
+        textBoxData.innerText, TextStyle(
+            color = White, fontSize = 20.sp, fontFamily = RalewayRegular
+        )
+    ) + 20.dp
 
     //Box that takes up the entire space
     Box(
         Modifier
-            .padding(bottom=20.dp)
+            .padding(bottom = 10.dp)
             .fillMaxWidth()
     ) {
         //Container for Text
         Box(
             Modifier
                 .width(
-                    if (textWidth>=240.dp) 240.dp else textWidth
+                    if (textWidth >= 240.dp) 240.dp else textWidth
                 )
                 .clip(RoundedCornerShape(15.dp))
                 .background(
@@ -257,9 +287,9 @@ fun TextBox(textBoxData: TextBoxData) {
 
 //Used to calculate width for text Box (Calculates pixel size in text box, then extract width)
 @Composable
-fun measureTextWidth(inputText:String,style: TextStyle): Dp {
-    val measurer= rememberTextMeasurer()
-    val widthInPixel=measurer.measure(inputText,style).size.width
-    return with(LocalDensity.current){widthInPixel.toDp()}
+fun measureTextWidth(inputText: String, style: TextStyle): Dp {
+    val measurer = rememberTextMeasurer()
+    val widthInPixel = measurer.measure(inputText, style).size.width
+    return with(LocalDensity.current) { widthInPixel.toDp() }
 }
 

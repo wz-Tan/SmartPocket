@@ -48,7 +48,7 @@ fun MainLayout(){
         Column(modifier = Modifier
             .padding(padding)
             .fillMaxSize()){
-            Page_Chat()
+            Page_Chat(padding)
         }
     }
 }
