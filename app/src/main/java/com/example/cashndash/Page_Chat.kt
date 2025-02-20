@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
@@ -77,14 +79,15 @@ fun Page_Chat() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
     val keyboardHeight=with(LocalDensity.current){
-        WindowInsets.ime.getBottom(LocalDensity.current).toDp()-80.dp //80.dp is the height of the bottom app bar
+        WindowInsets.ime.getBottom(LocalDensity.current).toDp()-75.dp //80.dp is the height of the bottom app bar
     }
+
+    var offsetValue=if (WindowInsets.isImeVisible) minOf(-keyboardHeight,0.dp) else 0.dp //prevents the bar from going lower than 0.dp
     Box(
         Modifier
             .fillMaxSize()
             .background(color = Black)
             .padding(horizontal = 10.dp)
-            //Keeps the Content Within the Padding (Without this the window will go beyond top bar)
     ) {
         Column(
             Modifier
@@ -114,7 +117,7 @@ fun Page_Chat() {
                 Modifier
                     .padding(top = 10.dp)
                     .fillMaxSize()
-                    .offset(x=0.dp,y= if(WindowInsets.isImeVisible) -keyboardHeight else 0.dp)
+                    .offset(x=0.dp,y=offsetValue)
                     .zIndex(0.5f)
             ) {
 
@@ -162,8 +165,7 @@ fun Page_Chat() {
                         .fillMaxWidth()
                         .height(50.dp)
                         .clip(RoundedCornerShape(20.dp))
-                        .background(Black)
-                        .border(2.dp, White, RoundedCornerShape(20.dp))
+                        .border(1.dp,White, RoundedCornerShape(20.dp))
                 ) {
                     Row(
                         Modifier
