@@ -1,40 +1,37 @@
 package com.example.cashndash
 
+import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,82 +40,113 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import androidx.core.view.WindowCompat
 import com.example.cashndash.ui.theme.Black
 import com.example.cashndash.ui.theme.Gray_Container
 import com.example.cashndash.ui.theme.Purple
-import com.example.cashndash.ui.theme.RalewayLight
 import com.example.cashndash.ui.theme.RalewayRegular
 import com.example.cashndash.ui.theme.White
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Mic
 import compose.icons.feathericons.Send
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 
 data class TextBoxData(
     val innerText: String, val sender: String
 )
 
-//How to Clip Content on Top Of Screen? Or how to move the bottom container as needed 
+//How to Scroll the LazyColumn?
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Page_Chat(padding:PaddingValues) {
+fun Page_Chat() {
+    //Context is DOM, Activity is the Current <HTML> Tag, Window is the Viewport
+    //Set the Window to NOT push the elements when the keyboard is called
+    val context= LocalContext.current
+    val activity=context as? Activity
+    val window= activity?.window
+    if (window != null) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
+    val keyboardHeight=with(LocalDensity.current){
+        WindowInsets.ime.getBottom(LocalDensity.current).toDp()-80.dp //80.dp is the height of the bottom app bar
+    }
     Box(
         Modifier
             .fillMaxSize()
             .background(color = Black)
-            .padding(horizontal = 10.dp, vertical = 3.dp)
+            .padding(horizontal = 10.dp)
             //Keeps the Content Within the Padding (Without this the window will go beyond top bar)
-            .consumeWindowInsets(padding)
-            .imePadding() //Adjust Padding When Keyboard Called
     ) {
         Column(
             Modifier
                 .fillMaxSize()
         ) {
-            Text(
-                text = "Chat",
-                fontFamily = RalewayRegular,
-                fontSize = 30.sp,
-                color = White,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Start
-            )
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .zIndex(1f)
+                    .background(Black)
+            ){
+                Text(
+                    text = "Chat",
+                    fontFamily = RalewayRegular,
+                    fontSize = 30.sp,
+                    color = White,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top=3.dp),
+                    textAlign = TextAlign.Start
+                )
+            }
+
 
             //Box containing Chat and Bottom Insert Textbox
             Box(
                 Modifier
                     .padding(top = 10.dp)
                     .fillMaxSize()
+                    .offset(x=0.dp,y= if(WindowInsets.isImeVisible) -keyboardHeight else 0.dp)
+                    .zIndex(0.5f)
             ) {
 
-                var listState = rememberLazyListState() //Similar to a scroll state for lazy columns
+                var listState = rememberLazyListState()
                 val coroutineScope = rememberCoroutineScope()
                 var textBoxList = remember {
                     mutableStateListOf(
                         TextBoxData("This is the first message", "Bot"),
                         TextBoxData("This is the second message", "User"),
+                        TextBoxData("This is the first message", "Bot"),
+                        TextBoxData("This is the second message", "User"),
+                        TextBoxData("This is the first message", "Bot"),
+                        TextBoxData("This is the second message", "User"),
+                        TextBoxData("This is the first message", "Bot"),
+                        TextBoxData("This is the second message", "User"),
+                        TextBoxData("This is the first message", "Bot"),
+                        TextBoxData("This is the second message", "User"),
+                        TextBoxData("This is the first message", "Bot"),
+                        TextBoxData("This is the second message", "User"),
+                        TextBoxData("This is the first message", "Bot"),
+                        TextBoxData("This is the last message", "User"),
+
                     )
                 }
 
-                //Column for chat
-                //LazyColumn to speed up performance because it only renders necessary frames->
-                // Has its own scroll state as well
+
+                //lazyColumn for chat
                 LazyColumn(
                     Modifier
                         .fillMaxSize()
-                        .padding(bottom = 50.dp), state = listState
+                        .padding(bottom = 50.dp),
+                    state = listState
                 ) {
                     //For Each, Map
                     items(textBoxList) { item ->
@@ -174,6 +202,10 @@ fun Page_Chat(padding:PaddingValues) {
                                     textFieldScrollState.scrollTo(
                                         //Dont scroll if on first line (Default is 0)
                                         if (currLine == 0) 5 else textFieldScrollState.maxValue - 5
+                                    )
+
+                                    Log.i("TextSize",
+                                        listState.layoutInfo.viewportEndOffset.toString()
                                     )
                                 }
 
