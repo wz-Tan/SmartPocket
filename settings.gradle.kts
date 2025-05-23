@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Cash n Dash"
+rootProject.name = "Smart Pocket"
 include(":app")
  
