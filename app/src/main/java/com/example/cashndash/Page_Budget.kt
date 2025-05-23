@@ -75,7 +75,7 @@ fun Page_Budget() {
                     .size(300.dp)
                     .align(Alignment.Center)
                     .drawBehind{
-                        val path= Path().apply{
+                        Path().apply{
                             drawArc(
                                 Color.Red,
                                 0f, //Angle starts from where (0f is the 90deg)
