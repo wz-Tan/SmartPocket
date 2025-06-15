@@ -42,6 +42,7 @@ android {
 
 
 dependencies {
+    implementation("br.com.devsrsouza.compose.icons:font-awesome:1.1.1")
     implementation("br.com.devsrsouza.compose.icons:feather:1.1.1")
     implementation ("co.yml:ycharts:2.1.0")
     implementation("androidx.compose.ui:ui:1.6.7")

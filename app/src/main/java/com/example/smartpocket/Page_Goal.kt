@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -57,6 +59,16 @@ import com.example.smartpocket.ui.theme.RalewayBold
 import com.example.smartpocket.ui.theme.RalewayRegular
 import com.example.smartpocket.ui.theme.RalewayThin
 import com.example.smartpocket.ui.theme.White
+import compose.icons.FontAwesomeIcons
+import compose.icons.fontawesomeicons.Regular
+import compose.icons.fontawesomeicons.Solid
+import compose.icons.fontawesomeicons.regular.ArrowAltCircleRight
+import compose.icons.fontawesomeicons.regular.HandPointRight
+import compose.icons.fontawesomeicons.solid.AngleRight
+import compose.icons.fontawesomeicons.solid.Compass
+import compose.icons.fontawesomeicons.solid.Peace
+import compose.icons.fontawesomeicons.solid.Pen
+import compose.icons.fontawesomeicons.solid.ShoePrints
 import kotlinx.coroutines.time.withTimeout
 import kotlinx.coroutines.withTimeout
 import kotlin.math.floor
@@ -73,41 +85,95 @@ fun Page_Goal(){
             Modifier
                 .fillMaxSize()
         ){
-            Text(
-                text = "Goals",
-                fontFamily = RalewayRegular,
-                fontSize = 30.sp,
-                color = White,
-                modifier = Modifier
+            Row(
+                Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp),
-                textAlign = TextAlign.Start
-            )
+                    .height(50.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+
+            ){
+
+                Text(
+                    text = "Goals",
+                    fontFamily = RalewayRegular,
+                    fontSize = 30.sp,
+                    color = White,
+                )
+
+
+                Icon(
+                    FontAwesomeIcons.Solid.Pen,
+                    contentDescription = "Edit Symbol",
+                    modifier = Modifier
+                        .size(25.dp)
+
+                )
+
+            }
+
 
             Spacer(modifier=Modifier.height(10.dp))
 
-            Surface(
-                Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .clip(RoundedCornerShape(10.dp)),
-                    color = Gray_Container
+            Goal_Container("Vacation","10 Days Left",FontAwesomeIcons.Solid.Compass)
+            Goal_Container("Shoes","2 Weeks Left",FontAwesomeIcons.Solid.ShoePrints)
+
+        }
+    }
+}
+
+@Composable
+fun Goal_Container(text:String,timeLeft:String,customIcon:ImageVector){
+    Surface(
+        Modifier
+            .padding(bottom = 15.dp)
+            .fillMaxWidth()
+            .height(80.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .border(1.dp,White,RoundedCornerShape(10.dp)),
+        color = Black
+    ) {
+        Row(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+
             ) {
-                Row(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            Icon(
+                customIcon,
+                contentDescription = "Right Arrow",
+                modifier = Modifier
+                    .size(40.dp)
+            )
 
-                ) {
-                    Text(color=White,
-                        text = "Vacation",
-                        fontFamily = RalewayRegular,
-                        fontSize = 24.sp)
+            Spacer(Modifier
+                .width(20.dp))
 
+            //Column for item name and the deadline
+            Column(){
+                Text(color=White,
+                    text = text,
+                    fontFamily = RalewayRegular,
+                    fontSize = 26.sp)
 
-                }
+                Text(color=White,
+                    text = timeLeft,
+                    fontFamily = RalewayRegular,
+                    fontSize = 20.sp)
+
             }
+
+
+            //Pushes the arrow to the end
+            Spacer(Modifier.weight(1f))
+
+            Icon(
+                FontAwesomeIcons.Solid.AngleRight,
+                contentDescription = "Right Arrow",
+                modifier = Modifier
+                    .size(40.dp)
+            )
         }
     }
 }
