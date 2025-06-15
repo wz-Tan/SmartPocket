@@ -1,4 +1,4 @@
-package com.example.cashndash.ui.theme
+package com.example.smartpocket.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

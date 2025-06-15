@@ -1,4 +1,4 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -25,16 +25,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.cashndash.ui.theme.Black
-import com.example.cashndash.ui.theme.CashNDashTheme
-import com.example.cashndash.ui.theme.Purple
+import com.example.smartpocket.ui.theme.Black
+import com.example.smartpocket.ui.theme.smartpocketTheme
+import com.example.smartpocket.ui.theme.Purple
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CashNDashTheme {
+            smartpocketTheme {
                 MainLayout()
             }
         }

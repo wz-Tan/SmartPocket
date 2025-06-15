@@ -1,4 +1,4 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Phone

@@ -1,4 +1,4 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -50,13 +50,13 @@ import co.yml.charts.ui.linechart.model.LineStyle
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
-import com.example.cashndash.ui.theme.Black
-import com.example.cashndash.ui.theme.Gray_Container
-import com.example.cashndash.ui.theme.LatoRegular
-import com.example.cashndash.ui.theme.LightGray
-import com.example.cashndash.ui.theme.RalewayLight
-import com.example.cashndash.ui.theme.RalewayRegular
-import com.example.cashndash.ui.theme.White
+import com.example.smartpocket.ui.theme.Black
+import com.example.smartpocket.ui.theme.Gray_Container
+import com.example.smartpocket.ui.theme.LatoRegular
+import com.example.smartpocket.ui.theme.LightGray
+import com.example.smartpocket.ui.theme.RalewayLight
+import com.example.smartpocket.ui.theme.RalewayRegular
+import com.example.smartpocket.ui.theme.White
 
 
 @OptIn(ExperimentalMaterial3Api::class)

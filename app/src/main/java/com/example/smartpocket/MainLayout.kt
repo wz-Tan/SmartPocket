@@ -1,4 +1,4 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,8 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
-import com.example.cashndash.ui.theme.Black
-import com.example.cashndash.ui.theme.Purple
+import com.example.smartpocket.ui.theme.Black
+import com.example.smartpocket.ui.theme.Purple
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,13 +32,15 @@ fun MainLayout(){
                     actionIconContentColor = White
                 ),
                 title = { Text("") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .height(60.dp)
             )
         },
         bottomBar = {
             BottomAppBar(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .height(80.dp),
                 containerColor = Black,
                 content = { Text("") }

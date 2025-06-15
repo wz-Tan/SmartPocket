@@ -1,4 +1,4 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,8 +23,8 @@ import co.yml.charts.ui.linechart.model.LineStyle
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
-import com.example.cashndash.ui.theme.Black
-import com.example.cashndash.ui.theme.White
+import com.example.smartpocket.ui.theme.Black
+import com.example.smartpocket.ui.theme.White
 
 //We feed data into a pre determined LineChart() function
 

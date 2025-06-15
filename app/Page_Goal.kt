@@ -1,4 +1,4 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import androidx.compose.runtime.Composable
 

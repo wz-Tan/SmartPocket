@@ -1,4 +1,4 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -42,11 +42,11 @@ import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.FractionalThreshold
 import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
-import com.example.cashndash.ui.theme.Black
-import com.example.cashndash.ui.theme.LatoRegular
-import com.example.cashndash.ui.theme.RalewayLight
-import com.example.cashndash.ui.theme.RalewayRegular
-import com.example.cashndash.ui.theme.White
+import com.example.smartpocket.ui.theme.Black
+import com.example.smartpocket.ui.theme.LatoRegular
+import com.example.smartpocket.ui.theme.RalewayLight
+import com.example.smartpocket.ui.theme.RalewayRegular
+import com.example.smartpocket.ui.theme.White
 import kotlin.math.roundToInt
 
 @Composable

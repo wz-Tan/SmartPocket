@@ -1,6 +1,8 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import android.util.Log
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,11 +23,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,21 +36,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.RoundRect
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.cashndash.ui.theme.Black
-import com.example.cashndash.ui.theme.Gray_Container
-import com.example.cashndash.ui.theme.LatoRegular
-import com.example.cashndash.ui.theme.LightGray
-import com.example.cashndash.ui.theme.RalewayLight
-import com.example.cashndash.ui.theme.RalewayThin
-import com.example.cashndash.ui.theme.White
+import co.yml.charts.axis.DataCategoryOptions
+import co.yml.charts.common.utils.DataUtils
+import co.yml.charts.ui.barchart.models.BarChartType
+import com.example.smartpocket.ui.theme.Black
+import com.example.smartpocket.ui.theme.Gray_Container
+import com.example.smartpocket.ui.theme.LatoRegular
+import com.example.smartpocket.ui.theme.LightGray
+import com.example.smartpocket.ui.theme.RalewayLight
+import com.example.smartpocket.ui.theme.RalewayRegular
+import com.example.smartpocket.ui.theme.White
 
 @Composable
 fun TransactionContainer(){
@@ -133,7 +138,8 @@ fun DropDownMenu() {
                     .clickable {
                         Log.i("Menu","I am Clicked")
                         isExpanded=true
-                    })
+                    }
+            )
         }
 
 
@@ -312,4 +318,95 @@ fun BudgetProgressBar(){
     }
 }
 
+@Composable
+fun Donut(size:Int,
+          color: Color,
+          text:String,
+          goal:Double,
+          curr:Double,
+          date:Boolean)
+{
+
+    val angleValue=(curr/goal)*360f
+    var referenceAngle by remember{ mutableFloatStateOf(0f) }
+    val drawnAngle by animateFloatAsState(
+        targetValue = referenceAngle,
+        animationSpec = tween(
+            durationMillis = 1500
+        )
+    )
+
+    LaunchedEffect(Unit) {
+        referenceAngle= angleValue.toFloat()
+    }
+
+    //Box for Canvas
+    Box(
+        Modifier
+            .padding(20.dp)
+            .size(size.dp)
+            .drawBehind {
+                Path().apply {
+                    drawCircle(
+                        color= Gray_Container,
+                        style = Stroke(30f, cap = StrokeCap.Round)
+                    )
+
+                    drawArc(
+                        color=color,
+                        startAngle = 270f,
+                        sweepAngle = drawnAngle,
+                        useCenter = false,
+                        style = Stroke(30f, cap = StrokeCap.Round),
+                        size = Size(size.dp.toPx(),size.dp.toPx())
+                    )
+                }
+            }
+    ){
+        //Description
+        Column(
+            Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            Text(
+                text = if(!date) "$"+"%.2f".format(curr) else (goal-curr).toInt().toString(),
+                fontFamily = LatoRegular,
+                fontSize = 20.sp,
+                color = White,
+            )
+
+            Text(
+                text = text,
+                fontFamily = RalewayRegular,
+                fontSize = 18.sp,
+                color = White,
+                modifier=Modifier.padding(bottom = 10.dp)
+            )
+
+            if (!date){
+                Text(
+                    text = "$"+"%.2f".format(goal),
+                    fontFamily = LatoRegular,
+                    fontSize = 18.sp,
+                    color = White,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun BarChart(){
+    val barChartInfo = DataUtils.getBarChartData(
+        listSize = 7,
+        maxRange = 7,
+        BarChartType.HORIZONTAL,
+        DataCategoryOptions(true)
+    )
+
+
+}
 

@@ -1,4 +1,4 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import org.junit.Test
 

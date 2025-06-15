@@ -1,4 +1,4 @@
-package com.example.cashndash
+package com.example.smartpocket
 
 import android.app.Activity
 import android.util.Log
@@ -52,11 +52,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.view.WindowCompat
-import com.example.cashndash.ui.theme.Black
-import com.example.cashndash.ui.theme.Gray_Container
-import com.example.cashndash.ui.theme.Purple
-import com.example.cashndash.ui.theme.RalewayRegular
-import com.example.cashndash.ui.theme.White
+import com.example.smartpocket.ui.theme.Black
+import com.example.smartpocket.ui.theme.Gray_Container
+import com.example.smartpocket.ui.theme.Purple
+import com.example.smartpocket.ui.theme.RalewayRegular
+import com.example.smartpocket.ui.theme.White
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Mic
 import compose.icons.feathericons.Send
@@ -139,7 +139,6 @@ fun Page_Chat() {
                         TextBoxData("This is the second message", "User"),
                         TextBoxData("This is the first message", "Bot"),
                         TextBoxData("This is the last message", "User"),
-
                     )
                 }
 

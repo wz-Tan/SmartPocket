@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.cashndash"
+    namespace = "com.example.smartpocket"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.cashndash"
+        applicationId = "com.example.smartpocket"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
