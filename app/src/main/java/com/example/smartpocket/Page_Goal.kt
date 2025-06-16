@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -71,66 +74,107 @@ import compose.icons.fontawesomeicons.solid.Pen
 import compose.icons.fontawesomeicons.solid.ShoePrints
 import kotlinx.coroutines.time.withTimeout
 import kotlinx.coroutines.withTimeout
+import kotlin.math.absoluteValue
 import kotlin.math.floor
 
+
 @Composable
-fun Page_Goal(){
+fun Page_Goal() {
+    var selected by remember{mutableStateOf(0)}
+
     Box(
         Modifier
             .fillMaxSize()
             .background(Black)
-            .padding(vertical=3.dp,horizontal=10.dp)
-    ){
+            .padding(vertical = 3.dp, horizontal = 10.dp)
+    ) {
         Column(
             Modifier
                 .fillMaxSize()
-        ){
+        ) {
+            Spacer(Modifier.height(20.dp))
+
+
+            Text(
+                text = "Goals",
+                fontFamily = RalewayRegular,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 30.sp,
+                color = White,
+            )
+
+            Text(
+                text = "Your Financial Targets",
+                fontFamily = RalewayRegular,
+                fontSize = 20.sp,
+                color = White,
+            )
+
+            Spacer(Modifier.height(15.dp))
+
+
+            //Open, Completed Categories
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-
+                    .height(40.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                verticalAlignment = Alignment.CenterVertically
             ){
+                Box(
+                    Modifier
+                        .background(if(selected==0) White else Gray_Container)
+                        .weight(1f)
+                        .fillMaxSize()
+                        .clickable {
+                            selected=0;
+                        },
+                    contentAlignment = Alignment.Center
+                ){
+                    Text(text = "In Progress",
+                        fontFamily = RalewayRegular,
+                        fontSize = 16.sp,
+                        color = if(selected==0) Black else White)
+                }
 
-                Text(
-                    text = "Goals",
-                    fontFamily = RalewayRegular,
-                    fontSize = 30.sp,
-                    color = White,
-                )
+                VerticalDivider(color = White, thickness = 1.dp)
 
-
-                Icon(
-                    FontAwesomeIcons.Solid.Pen,
-                    contentDescription = "Edit Symbol",
-                    modifier = Modifier
-                        .size(25.dp)
-
-                )
-
+                Box(
+                    Modifier
+                        .background(if(selected==1) White else Gray_Container)
+                        .weight(1f)
+                        .fillMaxSize()
+                        .clickable {
+                            selected=1
+                        },
+                    contentAlignment = Alignment.Center
+                ){
+                    Text(text = "Completed",
+                        fontFamily = RalewayRegular,
+                        fontSize = 16.sp,
+                        color = if(selected==1) Black else White)
+                }
             }
 
 
-            Spacer(modifier=Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
-            Goal_Container("Vacation","10 Days Left",FontAwesomeIcons.Solid.Compass)
-            Goal_Container("Shoes","2 Weeks Left",FontAwesomeIcons.Solid.ShoePrints)
+            Goal_Container("Vacation", "10 Days Left", FontAwesomeIcons.Solid.Compass)
+            Goal_Container("Shoes", "2 Weeks Left", FontAwesomeIcons.Solid.ShoePrints)
 
         }
     }
 }
 
 @Composable
-fun Goal_Container(text:String,timeLeft:String,customIcon:ImageVector){
+fun Goal_Container(text: String, timeLeft: String, customIcon: ImageVector) {
     Surface(
         Modifier
             .padding(bottom = 15.dp)
             .fillMaxWidth()
-            .height(80.dp)
+            .height(70.dp)
             .clip(RoundedCornerShape(10.dp))
-            .border(1.dp,White,RoundedCornerShape(10.dp)),
+            .border(1.dp, White, RoundedCornerShape(10.dp)),
         color = Black
     ) {
         Row(
@@ -144,23 +188,29 @@ fun Goal_Container(text:String,timeLeft:String,customIcon:ImageVector){
                 customIcon,
                 contentDescription = "Right Arrow",
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(30.dp)
             )
 
-            Spacer(Modifier
-                .width(20.dp))
+            Spacer(
+                Modifier
+                    .width(20.dp)
+            )
 
             //Column for item name and the deadline
-            Column(){
-                Text(color=White,
+            Column() {
+                Text(
+                    color = White,
                     text = text,
                     fontFamily = RalewayRegular,
-                    fontSize = 26.sp)
+                    fontSize = 20.sp
+                )
 
-                Text(color=White,
+                Text(
+                    color = White,
                     text = timeLeft,
                     fontFamily = RalewayRegular,
-                    fontSize = 20.sp)
+                    fontSize = 16.sp
+                )
 
             }
 
